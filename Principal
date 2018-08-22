@@ -1,0 +1,175 @@
+# -*- coding: cp1252 -*-
+#Módulo Principal HILL CIPHER
+#Universidad del Valle de Guatemala
+#Grupo FÍSICOS DISCRETOS
+##31/05/2018
+
+from numpy import *
+from Defs_proyecto import *
+from numpy.linalg import inv
+
+print ("Bienvenido al programa de encriptación. \nIngrese el número de la opción que desea ejecutar")
+print ("1. Encriptar un mensaje")
+print ("2. Desencriptar un mensaje")
+print ("3. Encontrar una matriz clave")
+print ("4. Salir")
+opcion = raw_input("")
+while opcion != "4":
+    if opcion == "1":
+        print "Desea\n1. Encriptar con una matriz definida (Usted ingresa la matriz con la que desea encriptar)\n2. Que el programa le asigne una matriz aleatoria"
+        opcion2 = raw_input("")
+        while (opcion2 != "1") and (opcion2 !="2"):
+            print "Debe escoger entre las dos opciones mostradas"
+            print "1. Encriptar con una matriz definida (Usted ingresa la matriz con la que desea encriptar)\n2. Que el programa le asigne una matriz aleatoria"
+            opcion2 = raw_input("")
+        if opcion2 == "1":
+
+            clave = []
+            cont=1
+            string=raw_input("Ingrese la fila #"+str(cont)+" de su matriz clave. Cada elemento separado por un espacio(ejemplo: 1 2 3): ")
+            fila = string.split()
+            tamanio = len(fila)
+            lista2 = []
+            for i in fila:
+                lista2.append(int(i))
+            clave.append(lista2)
+            for i in range(len(fila)-1):
+                cont+=1
+                string=raw_input("Ingrese la fila #"+str(cont)+" de su matriz clave. Cada elemento separado por un espacio: ")
+                fila=string.split()
+                lista2=[]
+                for i in fila:
+                    lista2.append(int(i))
+                clave.append(lista2)
+            matriz = matrix(clave)
+            mensaje = raw_input("Ingrese el mensaje que usted desea ingresar:\n")
+            codificar = letras_numeros(mensaje)
+            matriz2 = divisiones(int(tamanio), codificar)
+            encriptacion = matriz*matriz2
+            lista = juntar(encriptacion)
+            nuevo = numeros_letras(lista)
+            printear = pasar_a_cadena(nuevo)  
+            print "Su mensaje codificado es: "+printear+"\n"
+        elif opcion2 == "2":
+            tamanio = raw_input("Ingrese el tamaño del que desea que sea la matriz: ")
+            hola = verificar_numero(tamanio)
+            while hola == "malo":
+                print "Debe ingresar un número!"
+                tamanio=raw_input("")
+                hola = verificar_numero(tamanio)
+            mensaje = raw_input( "Ingrese el mensaje que desea encriptar:\n")
+            codificar = letras_numeros(mensaje)
+            matriz = crear_matriz(int(tamanio))
+            while 0>=linalg.det(matriz).round() or linalg.det(matriz).round()%29 == 0:
+                matriz = crear_matriz(int(tamanio)) 
+            print "Su matriz clave es:"
+            for i in matriz:
+                print i
+            matriz2 = divisiones(int(tamanio), codificar)
+            encriptacion = matriz*matriz2
+            lista = juntar(encriptacion)
+            nuevo = numeros_letras(lista)
+            printear = pasar_a_cadena(nuevo)  
+            print "Su mensaje codificado es: "+printear+"\n"
+    elif opcion == "2":
+        print "Ingrese la opción que desea ejecutar:\n1. Desencriptar con la matriz desencriptadora\n2. Desencriptar con la matriz clave (la computadora encuentra la inversa por usted)"
+        matt = raw_input("")
+        if matt == "1":
+            clave = []
+            cont=1
+            string=raw_input("Ingrese la fila #"+str(cont)+" de su matriz clave. Cada elemento separado por un espacio(ejemplo: 1 2 3): ")
+            fila = string.split()
+            lista2 = []
+            for i in fila:
+                lista2.append(int(i))
+            clave.append(lista2)
+            for i in range(len(fila)-1):
+                cont+=1
+                string=raw_input("Ingrese la fila #"+str(cont)+" de su matriz clave. Cada elemento separado por un espacio: ")
+                fila=string.split()
+                lista2=[]
+                for i in fila:
+                    lista2.append(int(i))
+                clave.append(lista2)
+            matriz = matrix(clave)
+            inversa = Inversa(matriz)
+            descodificar = raw_input("Ingrese el mensaje que desea descodificar: ")
+            num = letras_numeros(descodificar)
+            matriz2 = divisiones(cont,num)
+            desencriptacion = inversa*matriz2
+            lista=juntar(desencriptacion)
+            nuevo=numeros_letras(lista)
+            printear = pasar_a_cadena(nuevo)
+            print "El mensaje desencriptado es: "
+            print printear+""
+        if matt == "2":
+            clave = []
+            cont=1
+            string=raw_input("Ingrese la fila #"+str(cont)+" de su matriz desencriptadora. Cada elemento separado por un espacio(ejemplo: 1 2 3): ")
+            fila = string.split()
+            lista2 = []
+            for i in fila:
+                lista2.append(int(i))
+            clave.append(lista2)
+            for i in range(len(fila)-1):
+                cont+=1
+                string=raw_input("Ingrese la fila #"+str(cont)+" de su matriz clave. Cada elemento separado por un espacio: ")
+                fila=string.split()
+                lista2=[]
+                for i in fila:
+                    lista2.append(int(i))
+                clave.append(lista2)
+            matriz = matrix(clave)
+            descodificar = raw_input("Ingrese el mensaje que desea descodificar: ")
+            num = letras_numeros(descodificar)
+            matriz2 = divisiones(cont,num)
+            desencriptacion = matriz*matriz2
+            lista=juntar(desencriptacion)
+            nuevo=numeros_letras(lista)
+            printear = pasar_a_cadena(nuevo)
+            print "El mensaje desencriptado es: "
+            print printear+""
+            
+    elif opcion == "3":
+        Dimension = raw_input("Ingrese la cantidad de columnas que tiene la matriz que desea encontrar: ")
+        hola = verificar_numero(Dimension)
+        while hola == "malo":
+            print "Debe ingresar un número!"
+            Dimension=raw_input("")
+            hola = verificar_numero(Dimension)
+        Desencriptado = raw_input("Ingrese el mensaje que NO está encriptado: ")
+        Encriptado = raw_input("Ingrese el mensaje que está encriptado: ")
+        cadena1 = letras_numeros(Desencriptado)
+        cadena2 = letras_numeros(Encriptado)
+        lista1 = []
+        lista2 = []
+        for i in range(int(Dimension)*int(Dimension)):
+            lista1.append(cadena1[i])
+            lista2.append(cadena2[i])
+        matriz1 = divisiones(int(Dimension),lista1)
+        matriz2 = divisiones(int(Dimension),lista2)
+        inversa = Inversa(matriz1)
+        clave = matriz2*inversa
+        temp3=clave.getA()
+        temp4=[]
+        for i in temp3:
+            temp5=[]
+            for j in i:
+                ing = mod_29(j)
+                temp5.append(ing)
+            temp4.append(temp5)
+        printear = matrix(temp4)
+        print "La matriz clave es:\n "
+        print printear
+        print "\nLa matriz desencriptadora es: \n"
+        print Inversa(printear)
+        print "\n"
+    else:
+        print "Debe ingresar el número de la opción que desea\n"
+    print ("1. Encriptar un mensaje")
+    print ("2. Desencriptar un mensaje")
+    print ("3. Encontrar una matriz clave")
+    print ("4. Salir")
+    opcion=raw_input("")
+print "Órale"
+
